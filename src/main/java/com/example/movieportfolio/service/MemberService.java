@@ -98,4 +98,8 @@ public class MemberService {
         System.out.println(userVO);
         memberMapper.updateUser(userVO);
     }
+
+    public void delete(String userID) {
+        memberMapper.deleteUser(userID);
+    }
 }

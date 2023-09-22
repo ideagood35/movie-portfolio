@@ -39,4 +39,8 @@
         SET userPassword=#{userPassword}, userPhone=#{userPhone}, userAddress=#{userAddress}, userEmail=#{userEmail}
         WHERE userID=#{userID}
     </update>
+    <delete id="deleteUser">
+        DELETE FROM reservationtest_user
+        WHERE userID=#{userID}
+    </delete>
 </mapper>

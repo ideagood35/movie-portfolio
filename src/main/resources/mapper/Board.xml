@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieportfolio.mapper.BoardMapper">
+
+    <select id="getBoardList" resultType="BbsVO" parameterType="Integer">
+        SELECT * FROM reservation_bbs
+        WHERE
+        <if test="bbsID != null">
+            <![CDATA[
+             bbsID < #{bbsID}
+             ]]>
+        </if>
+        ORDER BY bbsID DESC LIMIT 10
+    </select>
+    <!--    // 추가-->
+    <insert id="insertBoard" parameterType="BbsVO">
+        INSERT INTO reservation_bbs (bbsID, bbsTitle, userID, bbsDate, bbsContent, bbsAvailable)
+        VALUES (#{bbsID}, #{bbsTitle}, #{userID}, #{bbsDate}, #{bbsContent}, #{bbsAvailable})
+    </insert>
+
+    <!--    삭제 -->
+    <select id="getBoard" resultType="BbsVO" parameterType="Integer">
+        SELECT * FROM reservation_bbs WHERE bbsID = #{bbsID}
+    </select>
+
+    <!--    수정-->
+    <update id="updateBoard" parameterType="BbsVO">
+        UPDATE reservation_bbs SET bbsTitle = #{bbsTitle}, bbsContent = #{bbsContent} WHERE bbsID = #{bbsID}
+    </update>
+
+    <!--    삭제 -->
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM reservation_bbs WHERE bbsID = #{bbsID}
+    </delete>
+
+</mapper>

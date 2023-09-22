@@ -19,4 +19,6 @@ public interface MemberMapper {
     boolean existsUserSSN(String userSSN);
 
     void updateUser(UserVO user);
+
+    void deleteUser(String userID);
 }

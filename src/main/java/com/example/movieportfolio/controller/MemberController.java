@@ -79,6 +79,11 @@ public class MemberController {
         }
     }
 
+    /////회원 등록후 다시 로그인페이지로 가기/////
+    @GetMapping("/userLoginView.reservation")
+    public String userLoginView() {
+        return "userLoginView";
+    }
 
     //로그인
     @PostMapping("/userLoginAction.reservation")
@@ -179,14 +184,24 @@ public class MemberController {
             session.setAttribute("modal", new ModalDTO("오류 메세지", "비밀번호가 일치하지 않습니다.", ModalDTO.ERROR));
             return "redirect:/userEditView.reservation";  // 회원 가입 페이지로 리다이렉트.
         }
+
     }
 
-    /////회원 등록후 다시 로그인페이지로 가기/////
-    @GetMapping("/userLoginView.reservation")
-    public String userLoginView() {
-        return "userLoginView";
+    //회워탈퇴
+    @GetMapping("/userDeleteView.reservation")
+    public String userDeleteView(Model model, HttpSession session) {
+
+        return "userDeleteView";
     }
 
+    //회원 탈퇴액션
+    @GetMapping("/userDeleteAction.reservation")
+    public String userDeleteView(HttpSession session) {
+        UserVO loggedInUser = (UserVO) session.getAttribute("loggedInUser");
+        memberService.delete(loggedInUser.getUserID());
+        session.invalidate();//세션 무효화
+        return "userDeleteResultView";
+    }
 
 }
 
