@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="callSettersOnNulls" value="true"/> <!-- 쿼리 결과가 NULL인 경우, mybatis가 setter(or put)를 호출하도록 설정. HashMap resultType을 구성한 경우, 이설정이 없으면, 컬럼이 안보일수 있음-->
+        <setting name="jdbcTypeForNull" value="NULL"/>  <!--파라미터가 NULL인 경우, mybatis가 JDBC 타입을 NULL로 지정하도록 설정-->
+    </settings>
+</configuration>
+
+
+
+

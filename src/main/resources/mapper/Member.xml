@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieportfolio.mapper.MemberMapper">
+    <select id="login" parameterType="String" resultType="com.example.movieportfolio.vo.UserVO">
+        select *
+        from reservationtest_user
+        where userID = #{userID}
+    </select>
+
+    <insert id="register" parameterType="UserVO">
+        insert into reservationtest_user (userID, userPassword, userResidentID, userName, userPhone, userAddress, userEmail,
+                                          userType)
+        values (#{userID}, #{userPassword}, #{userResidentID}, #{userName}, #{userPhone}, #{userAddress}, #{userEmail},
+                #{userType})
+    </insert>
+
+    <!-- 아이디 중복 체크 -->
+    <select id="existsUserID" resultType="boolean">
+        SELECT COUNT(*)
+        FROM reservationtest_user
+        WHERE userID = #{userID}
+    </select>
+
+    <!-- 주민등록번호 중복 체크 -->
+    <select id="existsUserSSN" resultType="boolean">
+        SELECT COUNT(*)
+        FROM reservationtest_user
+        WHERE userResidentID = #{userSSN}
+    </select>
+
+    <update id="updateUserPwd">
+        UPDATE reservationtest_user
+        SET userPassword=#{newPassword}
+        WHERE userID=#{userID}
+    </update>
+</mapper>

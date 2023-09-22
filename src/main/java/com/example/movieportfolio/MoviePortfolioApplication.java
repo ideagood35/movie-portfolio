@@ -1,0 +1,13 @@
+package com.example.movieportfolio;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MoviePortfolioApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MoviePortfolioApplication.class, args);
+    }
+
+}
