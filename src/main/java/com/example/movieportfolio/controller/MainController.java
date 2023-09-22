@@ -18,4 +18,3 @@ public class MainController {
         return "mainView";
     }
 }
-
