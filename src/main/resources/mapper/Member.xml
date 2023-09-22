@@ -34,4 +34,9 @@
         SET userPassword=#{newPassword}
         WHERE userID=#{userID}
     </update>
+    <update id="updateUser">
+        UPDATE reservationtest_user
+        SET userPassword=#{userPassword}, userPhone=#{userPhone}, userAddress=#{userAddress}, userEmail=#{userEmail}
+        WHERE userID=#{userID}
+    </update>
 </mapper>

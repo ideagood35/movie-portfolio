@@ -80,12 +80,7 @@ public class MemberController {
     }
 
 
-    /////회원 등록후 다시 로그인페이지로 가기/////
-    @GetMapping("/userLoginView.reservation")
-    public String userLoginView() {
-        return "userLoginView";
-    }
-
+    //로그인
     @PostMapping("/userLoginAction.reservation")
     public String userLogin(@RequestParam("userID") String userID, @RequestParam("userPassword") String password, Model model, HttpSession session) {
         // 여기서 memberService는 MemberService 객체입니다.
@@ -93,9 +88,11 @@ public class MemberController {
 
         if (user != null) {
             // 로그인 성공: 메인 페이지로 리다이렉트
+            session.setAttribute("userID", user.getUserID());  // 로그인한 사용자 정보를 세션에 저장
             session.setAttribute("loggedInUser", user);  // 로그인한 사용자 정보를 세션에 저장
+
             session.setAttribute("modal", new ModalDTO("성공 메세지", "로그인 됐습니다", ModalDTO.SUCCESS));
-            return "redirect:/userEditView";
+            return "redirect:/mainView.reservation";
         } else {
             // 로그인 실패: 에러 메시지와 함께 다시 로그인 페이지로 리다이렉트
             model.addAttribute("loginError", "Invalid username or password.");
@@ -104,9 +101,14 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/userLogoutAction.reservation")
+    public String logout(HttpSession session) {
+        session.invalidate(); //세션무효화
+        return "redirect:/mainView.reservation";
+    }
 
 
-//////////////비번찾기
+    //////////////비번찾기
     @GetMapping("/userFindView.reservation")
     public String userFindView() {
         return "userFindView";
@@ -127,19 +129,20 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/userFindResultView")
+    @GetMapping("/userEditView")
     public String userFindResultView() {
         return "userFindResultView";
     }
 
 
-    @GetMapping("/userEditView")
+    @GetMapping("/userEditView.reservation")
     public String userEditView(Model model, HttpSession session) {
         // 세션에서 로그인한 사용자의 정보 가져오기
         UserVO loggedInUser = (UserVO) session.getAttribute("loggedInUser");
 
         if (loggedInUser != null) {
             // 사용자 정보에서 전화번호를 가져와서 모델에 추가
+            model.addAttribute("userID", loggedInUser.getUserID());
             model.addAttribute("userPhone", loggedInUser.getUserPhone());
             model.addAttribute("userAddress", loggedInUser.getUserAddress());
             model.addAttribute("userEmail", loggedInUser.getUserEmail());
@@ -147,6 +150,43 @@ public class MemberController {
 
         return "userEditView";
     }
+
+    //회원수정
+    @PostMapping("/userEditAction.reservation")
+    public String editUser(@ModelAttribute UserVO userVO, HttpSession session) throws Exception {
+        // 필드 값 검사
+        if (userVO.getUserID() == null || userVO.getUserID().isEmpty() ||
+                userVO.getUserPassword() == null || userVO.getUserPassword().isEmpty() ||
+                userVO.getUserPasswordConfirm() == null || userVO.getUserPasswordConfirm().isEmpty()
+            // ... 위 내용은 null 이거나 또는 빈 문자열 이면 아래 로직 실행 ...
+        ) {
+            session.setAttribute("modal", new ModalDTO("오류 메세지", "모든 내용은 빈 칸일 수 없습니다.", ModalDTO.ERROR));
+            return "redirect:/userEditAction.reservation";  // 회원 가입 페이지로 리다이렉트.
+        }
+
+        if (userVO.getUserPassword().equals(userVO.getUserPasswordConfirm())) {
+            try {
+                // 비밀번호와 '비밀번호 확인'이 일치하는 경우
+                memberService.edit(userVO);  // 바로 register 메소드에 전달하여 사용자 정보를 등록합니다.
+                session.setAttribute("modal", new ModalDTO("성공 메세지", "수정되었습니다! 로그인해주세요.", ModalDTO.SUCCESS));
+                return "redirect:/userEditView.reservation";  // 로그인 페이지로 리다이렉트
+            } catch (Exception e) {
+                session.setAttribute("modal", new ModalDTO("오류 메세지", "모든 내용은 빈 칸일 수 없습니다.", ModalDTO.ERROR));
+                return "redirect:/userEditView.reservation";  // 회원 가입 페이지로 리다이렌트
+            }
+
+        } else {
+            session.setAttribute("modal", new ModalDTO("오류 메세지", "비밀번호가 일치하지 않습니다.", ModalDTO.ERROR));
+            return "redirect:/userEditView.reservation";  // 회원 가입 페이지로 리다이렉트.
+        }
+    }
+
+    /////회원 등록후 다시 로그인페이지로 가기/////
+    @GetMapping("/userLoginView.reservation")
+    public String userLoginView() {
+        return "userLoginView";
+    }
+
 
 }
 

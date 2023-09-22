@@ -94,4 +94,8 @@ public class MemberService {
     }
 
 
+    public void edit(UserVO userVO) {
+        System.out.println(userVO);
+        memberMapper.updateUser(userVO);
+    }
 }
