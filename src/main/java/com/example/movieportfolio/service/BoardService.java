@@ -1,5 +1,6 @@
 package com.example.movieportfolio.service;
 
+import com.example.movieportfolio.dto.PageRequestDTO;
 import com.example.movieportfolio.mapper.BoardMapper;
 import com.example.movieportfolio.vo.BbsVO;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,8 @@ import java.util.List;
 public class BoardService {
     BoardMapper boardMapper;
 
-    public List<BbsVO> getBoardList(Integer bbsID) {
-        return boardMapper.getBoardList(bbsID);
+    public List<BbsVO> getBoardList(PageRequestDTO pageRequestDTO) {
+        return boardMapper.getBoardList(pageRequestDTO);
     }
 
     public BbsVO getBoard(Integer bbsID) {
@@ -31,5 +32,9 @@ public class BoardService {
 
     public void deleteBoard(Integer bbsID) {
         boardMapper.deleteBoard(bbsID);
+    }
+
+    public int getTotalCount() {
+        return boardMapper.getTotalCount();
     }
 }

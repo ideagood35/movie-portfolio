@@ -12,6 +12,7 @@
           </div>
           <p class="lead">게시글을 작성합니다.</p>
           <hr>
+
           <form action="boardWriteAction.reservation" method="POST" class="pt-3" style="max-width:920px;">
             <div class="form-group">
               <label>제목</label>
