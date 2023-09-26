@@ -29,7 +29,7 @@
                 </div>
                 <div class="form-group">
                     <label>성명</label>
-                    <input type="text" class="form-control" value="${sessionScope.userNameForJoin}" disabled>
+                    <input name="userName" type="text" class="form-control" value="${sessionScope.userNameForJoin}" readonly>
                 </div>
                 <div class="form-group">
                     <label>주민등록번호</label>

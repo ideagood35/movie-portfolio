@@ -29,7 +29,10 @@ public class MemberController {
     public String userConfirmAction(@ModelAttribute UserVO userVO, HttpSession session) {
 
         String userName = userVO.getUserName(); // 이름
+        System.out.println(userName);
         String userResidentID = userVO.getUserResidentID(); // 주민번호
+
+        session.setAttribute("userNameForJoin", userName);
 
         if (userName == null || userName.trim().isEmpty() ||    //null 이거나 trim()공뱅이 있으면 자동으로 지주고 isEmpty() 이면 오류확인
                 userResidentID == null || !userResidentID.matches("\\d{13}")) {// 주민들록13자매칭이 아니면
@@ -50,7 +53,7 @@ public class MemberController {
     //회원 등록
     @PostMapping("/userJoinAction.reservation")
     public String insertUser(@ModelAttribute UserVO userVO, HttpSession session) throws Exception {
-        // 필드 값 검사
+
         if (userVO.getUserID() == null || userVO.getUserID().isEmpty() ||
                 userVO.getUserPassword() == null || userVO.getUserPassword().isEmpty() ||
                 userVO.getUserPasswordConfirm() == null || userVO.getUserPasswordConfirm().isEmpty()
