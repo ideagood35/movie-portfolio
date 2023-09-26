@@ -17,16 +17,16 @@
               <tr>
                 <th class="mobile" style="width:140px; text-align:center;">회원 아이디</th>
                 <th style="text-align:center;">회원 이름</th>
-                <th class="mobile" style="width:100px; text-align:center;">탈퇴</th>
+                <th class="mobile" style="width:100px; text-align:center;">수정</th>
               </tr>
             </thead>
             <tbody>
 	            <c:forEach items="${ userList }" var="user">
-                    <c:if test="${ user.userType ne 0 }">
+                    <c:if test="${ user.userType ne 0 }"><%--운영자 외 회원 표시 --%>
                         <tr>
                             <td style="text-align: center;">${ user.userID }</td>
                             <td style="text-align: center;">${ user.userName }</td>
-                            <td onclick="location.href = './userManageDeleteAction.reservation?userID=${ user.userID }';" class="btn btn-primary btn-block">탈퇴</td>
+                            <td onclick="location.href = './userEditView.reservation?userID=${ user.userID }';" class="btn btn-primary btn-block">수정</td>
                         </tr>
                     </c:if>
 	            </c:forEach>
@@ -42,10 +42,6 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <%--                        <li class="page-item"><a class="page-link" href="/boardListView.reservation?page=1">1</a></li>--%>
-                        <%--                        <li class="page-item"><a class="page-link" href="/boardListView.reservation?page=2">2</a></li>--%>
-                        <%--                        <li class="page-item"><a class="page-link" href="/boardListView.reservation?page=3">3</a></li>--%>
-
                         <c:forEach var="pageNumber" begin="1" end="${totalPage}">
                             <li class="page-item"><a class="page-link" href="/userListView.reservation?page=${pageNumber}">${pageNumber}</a></li>
                         </c:forEach>
