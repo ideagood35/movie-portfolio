@@ -22,18 +22,43 @@
             </thead>
             <tbody>
 	            <c:forEach items="${ userList }" var="user">
-	              <c:choose>
-	              	<c:when test="${user.userType eq 1}">
-		              <tr>
-		                <td style="text-align: center;">${ user.userID }</td>
-		                <td style="text-align: center;">${ user.userName }</td>
-		                <td onclick="location.href = './userManageDeleteAction.reservation?userID=${ user.userID }';" class="btn btn-primary btn-block">탈퇴</td>
-		              </tr>
-					</c:when>
-	              </c:choose>
+                    <c:if test="${ user.userType ne 0 }">
+                        <tr>
+                            <td style="text-align: center;">${ user.userID }</td>
+                            <td style="text-align: center;">${ user.userName }</td>
+                            <td onclick="location.href = './userManageDeleteAction.reservation?userID=${ user.userID }';" class="btn btn-primary btn-block">탈퇴</td>
+                        </tr>
+                    </c:if>
 	            </c:forEach>
              </tbody>
           </table>
+
+            <!-- Paging -->
+            <div class="container mt-4" style="max-width: 1080px; margin-left: 0; display: flex; justify-content: center;">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <%--                        <li class="page-item"><a class="page-link" href="/boardListView.reservation?page=1">1</a></li>--%>
+                        <%--                        <li class="page-item"><a class="page-link" href="/boardListView.reservation?page=2">2</a></li>--%>
+                        <%--                        <li class="page-item"><a class="page-link" href="/boardListView.reservation?page=3">3</a></li>--%>
+
+                        <c:forEach var="pageNumber" begin="1" end="${totalPage}">
+                            <li class="page-item"><a class="page-link" href="/userListView.reservation?page=${pageNumber}">${pageNumber}</a></li>
+                        </c:forEach>
+
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
         </main>
       </div>
     </div>

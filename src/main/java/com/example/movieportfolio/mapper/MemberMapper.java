@@ -1,5 +1,6 @@
 package com.example.movieportfolio.mapper;
 
+import com.example.movieportfolio.dto.UserPageRequestDTO;
 import com.example.movieportfolio.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,13 +13,17 @@ public interface MemberMapper {
 
     List<UserVO> login(@Param("userID") String userID);
 
+    List<UserVO> getUserList(UserPageRequestDTO userPageRequestDTO); //목록
+
+    int getUserTotalCount();
+
     void updateUserPwd(@Param("userID") String userID, @Param("newPassword") String newPassword);
 
-    boolean existsUserID(String userID);
+    boolean existsUserID(String userID);//비번
 
-    boolean existsUserSSN(String userSSN);
+    boolean existsUserSSN(String userSSN);//비번 확인
 
-    void updateUser(UserVO user);
+    void updateUser(UserVO user);//수정
 
-    void deleteUser(String userID);
+    void deleteUser(String userID); //삭제
 }

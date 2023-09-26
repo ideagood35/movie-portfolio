@@ -4,7 +4,6 @@ import com.example.movieportfolio.dto.PageRequestDTO;
 import com.example.movieportfolio.mapper.BoardMapper;
 import com.example.movieportfolio.vo.BbsVO;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

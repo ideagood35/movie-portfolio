@@ -22,11 +22,13 @@ public class BoardController {
 
     @GetMapping("/boardListView.reservation")
     public String boardListView(@ModelAttribute PageRequestDTO pageRequestDTO, Model model) {
-//        System.out.println("pageRequestDTO: " + pageRequestDTO);
+        System.out.println("pageRequestDTO: " + pageRequestDTO);
 
         List<BbsVO> bbsVOList = boardService.getBoardList(pageRequestDTO);
         int totalCount = boardService.getTotalCount();
         int totalPage = totalCount / pageRequestDTO.getSize();
+
+        System.out.println("토탈페이지: " +totalCount);
 
         model.addAttribute("list", bbsVOList);
         model.addAttribute("totalPage", totalPage);

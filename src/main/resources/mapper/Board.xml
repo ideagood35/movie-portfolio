@@ -8,13 +8,13 @@
     <select id="getTotalCount" resultType="int">
         SELECT count(*) FROM reservation_bbs
     </select>
-    <!--    // 추가-->
+    <!--    // 추가,등록 -->
     <insert id="insertBoard" parameterType="BbsVO">
         INSERT INTO reservation_bbs (bbsTitle, userID, bbsDate, bbsContent, bbsAvailable)
         VALUES (#{bbsTitle}, #{userID}, now(), #{bbsContent}, 1)
     </insert>
 
-    <!--    삭제 -->
+    <!--    상세 -->
     <select id="getBoard" resultType="BbsVO" parameterType="Integer">
         SELECT * FROM reservation_bbs WHERE bbsID = #{bbsID}
     </select>

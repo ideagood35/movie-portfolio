@@ -2,9 +2,7 @@ package com.example.movieportfolio.mapper;
 
 import com.example.movieportfolio.dto.PageRequestDTO;
 import com.example.movieportfolio.vo.BbsVO;
-import com.example.movieportfolio.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

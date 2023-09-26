@@ -1,5 +1,6 @@
 package com.example.movieportfolio.controller;
 
+import com.example.movieportfolio.dto.UserPageRequestDTO;
 import com.example.movieportfolio.service.MemberService;
 import com.example.movieportfolio.dto.ModalDTO;
 import com.example.movieportfolio.vo.UserVO;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -85,6 +87,7 @@ public class MemberController {
         return "userLoginView";
     }
 
+
     //로그인
     @PostMapping("/userLoginAction.reservation")
     public String userLogin(@RequestParam("userID") String userID, @RequestParam("userPassword") String password, Model model, HttpSession session) {
@@ -92,9 +95,10 @@ public class MemberController {
         UserVO user = memberService.validateMember(userID, password);
 
         if (user != null) {
-            // 로그인 성공: 메인 페이지로 리다이렉트
+            // 로그인 성공유지(sesssion이 로그인 유지하는 코드이다): 메인 페이지로 리다이렉트
             session.setAttribute("userID", user.getUserID());  // 로그인한 사용자 정보를 세션에 저장
             session.setAttribute("loggedInUser", user);  // 로그인한 사용자 정보를 세션에 저장
+            session.setAttribute("userType", user.getUserType()); //유저 타입-->운영자 유저 구별 하기 위한 코드
 
             session.setAttribute("modal", new ModalDTO("성공 메세지", "로그인 됐습니다", ModalDTO.SUCCESS));
             return "redirect:/mainView.reservation";
@@ -106,12 +110,32 @@ public class MemberController {
         }
     }
 
+    ////관리자에서 회원 관리
+    @GetMapping("/userListView.reservation")
+    public String userListView(@ModelAttribute UserVO userVO, UserPageRequestDTO userPageRequestDTO, Model model) {
+        System.out.println("유저리스트: " + userPageRequestDTO);
+
+        List<UserVO> userList = memberService.getUserList(userPageRequestDTO);
+        System.out.println("User list size: " + userList.size());  // 이 부분 추가
+
+
+
+        int totalCount = memberService.getUserTotalCount();
+        int totalPage = totalCount / userPageRequestDTO.getSize();
+        System.out.println("토탈카운트: " + totalCount);
+
+        model.addAttribute("userList", userList);
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("user", userVO);
+        return "userListView";
+    }
+
+
     @GetMapping("/userLogoutAction.reservation")
     public String logout(HttpSession session) {
         session.invalidate(); //세션무효화
         return "redirect:/mainView.reservation";
     }
-
 
     //////////////비번찾기
     @GetMapping("/userFindView.reservation")

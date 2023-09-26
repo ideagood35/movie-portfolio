@@ -1,5 +1,6 @@
 package com.example.movieportfolio.service;
 
+import com.example.movieportfolio.dto.UserPageRequestDTO;
 import com.example.movieportfolio.mapper.MemberMapper;
 import com.example.movieportfolio.vo.UserVO;
 import lombok.AllArgsConstructor;
@@ -101,5 +102,13 @@ public class MemberService {
 
     public void delete(String userID) {
         memberMapper.deleteUser(userID);
+    }
+
+    public List<UserVO> getUserList(UserPageRequestDTO userPageRequestDTO) {
+        return memberMapper.getUserList(userPageRequestDTO);
+    }
+
+    public int getUserTotalCount() {
+        return memberMapper.getUserTotalCount();
     }
 }
