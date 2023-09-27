@@ -22,11 +22,11 @@
             </thead>
             <tbody>
 	            <c:forEach items="${ userList }" var="user">
-                    <c:if test="${ user.userType ne 0 }"><%--운영자 외 회원 표시 --%>
+                    <c:if test="${ user.userType ne 0 }"><%--운영자 외 회원 표정 --%>
                         <tr>
                             <td style="text-align: center;">${ user.userID }</td>
                             <td style="text-align: center;">${ user.userName }</td>
-                            <td onclick="location.href = './userEditView.reservation?userID=${ user.userID }';" class="btn btn-primary btn-block">수정</td>
+                            <td onclick="location.href = './managerUserEditView.reservation?userID=${ user.userID }';" class="btn btn-primary btn-block">수정</td>
                         </tr>
                     </c:if>
 	            </c:forEach>

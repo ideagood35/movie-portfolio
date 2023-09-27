@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 @Service
@@ -70,7 +71,7 @@ public class MemberService {
 
     private void updateUserPassword(String userID, String newPassword) {  // <- 추가됨
         System.out.println("비밀번호 변경 완료");
-        memberMapper.updateUserPwd(userID,newPassword);
+        memberMapper.updateUserPwd(userID, newPassword);
     }
 
     /* 회원 정보 수정 메소드 추가 */
@@ -111,4 +112,16 @@ public class MemberService {
     public int getUserTotalCount() {
         return memberMapper.getUserTotalCount();
     }
+    public UserVO getUserById(String userId) {
+        List<UserVO> users = memberMapper.getUserById(userId);
+        if (users != null && !users.isEmpty()) {
+            return users.get(0);
+        } else {
+            throw new NoSuchElementException("No user found with id: " + userId);
+        }
+    }
+
+
+
 }
+

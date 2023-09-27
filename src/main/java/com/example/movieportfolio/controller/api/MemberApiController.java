@@ -18,14 +18,21 @@ public class MemberApiController {
 
     @PostMapping("/userLoginAction.reservation")
     public String login(@RequestBody UserVO userVO) {
-        UserVO result = memberService.validateMember(userVO.getUserID(), userVO.getUserPassword());
+        try {
+            UserVO result = memberService.validateMember(userVO.getUserID(), userVO.getUserPassword());
 
-        if (result != null) {
-            return "Login successful!";
-        } else {
-            return "Login failed!";
+            if (result != null) {
+                return "Login successful!";
+            } else {
+                // 실제로는 여기에 도달할 수 없습니다. validateMember가 실패하면 Exception을 던집니다.
+                return "Login failed!";
+            }
+        } catch (Exception e) {
+            // validateMember에서 발생한 예외를 여기서 처리합니다.
+            return e.getMessage();
         }
     }
+
 
     @PostMapping("/userFindAction.reservation")
     public String findPassword(@RequestBody Map<String, String> request) {

@@ -13,9 +13,7 @@
           <p class="lead">사용자 정보를 수정합니다.</p>
           <hr>
           <form action="./userEditAction.reservation" method="POST" class="pt-3" style="max-width:720px;">
-            <div class="form-group">
-              <label style=" font-size:25px;">ID</label>
-            <div name="userID" style="padding-bottom: 20px; font-size: xx-large;}">${userID}</div>
+            <input name="userID" type="hidden"  value="${userID}" class="form-control">
             <div class="form-group">
               <label>비밀번호</label>
                 <input name="userPassword" type="password" class="form-control">

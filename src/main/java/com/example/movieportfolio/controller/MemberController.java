@@ -32,7 +32,7 @@ public class MemberController {
         System.out.println(userName);
         String userResidentID = userVO.getUserResidentID(); // 주민번호
 
-        session.setAttribute("userNameForJoin", userName);
+        session.setAttribute("userNameForJoin", userName);//이름 오픈코드
 
         if (userName == null || userName.trim().isEmpty() ||    //null 이거나 trim()공뱅이 있으면 자동으로 지주고 isEmpty() 이면 오류확인
                 userResidentID == null || !userResidentID.matches("\\d{13}")) {// 주민들록13자매칭이 아니면
@@ -122,7 +122,6 @@ public class MemberController {
         System.out.println("User list size: " + userList.size());  // 이 부분 추가
 
 
-
         int totalCount = memberService.getUserTotalCount();
         int totalPage = totalCount / userPageRequestDTO.getSize();
         System.out.println("토탈카운트: " + totalCount);
@@ -133,7 +132,7 @@ public class MemberController {
         return "userListView";
     }
 
-
+    /////로그 아웃
     @GetMapping("/userLogoutAction.reservation")
     public String logout(HttpSession session) {
         session.invalidate(); //세션무효화
@@ -161,12 +160,12 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/userEditView")
+    @GetMapping("/userFindResultView")
     public String userFindResultView() {
         return "userFindResultView";
     }
 
-
+    //회원 수정 시작
     @GetMapping("/userEditView.reservation")
     public String userEditView(Model model, HttpSession session) {
         // 세션에서 로그인한 사용자의 정보 가져오기
@@ -183,7 +182,7 @@ public class MemberController {
         return "userEditView";
     }
 
-    //회원수정
+    //회원수정 진행
     @PostMapping("/userEditAction.reservation")
     public String editUser(@ModelAttribute UserVO userVO, HttpSession session) throws Exception {
         // 필드 값 검사
@@ -193,7 +192,7 @@ public class MemberController {
             // ... 위 내용은 null 이거나 또는 빈 문자열 이면 아래 로직 실행 ...
         ) {
             session.setAttribute("modal", new ModalDTO("오류 메세지", "모든 내용은 빈 칸일 수 없습니다.", ModalDTO.ERROR));
-            return "redirect:/userEditAction.reservation";  // 회원 가입 페이지로 리다이렉트.
+            return "redirect:/userEditAction.reservation";  // 회원 수정 페이지로 리다이렉트.
         }
 
         if (userVO.getUserPassword().equals(userVO.getUserPasswordConfirm())) {
@@ -201,20 +200,56 @@ public class MemberController {
                 // 비밀번호와 '비밀번호 확인'이 일치하는 경우
                 memberService.edit(userVO);  // 바로 register 메소드에 전달하여 사용자 정보를 등록합니다.
                 session.setAttribute("modal", new ModalDTO("성공 메세지", "수정되었습니다! 로그인해주세요.", ModalDTO.SUCCESS));
-                return "redirect:/userEditView.reservation";  // 로그인 페이지로 리다이렉트
+                return "redirect:/mainView.reservation";  // 로그인 페이지로 리다이렉트
             } catch (Exception e) {
-                session.setAttribute("modal", new ModalDTO("오류 메세지", "모든 내용은 빈 칸일 수 없습니다.", ModalDTO.ERROR));
+                session.setAttribute("modal", new ModalDTO("오류 메세지", e.getMessage(), ModalDTO.ERROR));
                 return "redirect:/userEditView.reservation";  // 회원 가입 페이지로 리다이렌트
             }
-
         } else {
             session.setAttribute("modal", new ModalDTO("오류 메세지", "비밀번호가 일치하지 않습니다.", ModalDTO.ERROR));
             return "redirect:/userEditView.reservation";  // 회원 가입 페이지로 리다이렉트.
         }
-
     }
 
-    //회워탈퇴
+    //////관리자에서 수정 진행
+    @GetMapping("/managerUserEditView.reservation")
+    public String managerUserEditView(@RequestParam("userID") String userID, Model model) {
+        UserVO user = memberService.getUserById(userID);
+        model.addAttribute("user", user);
+        return "managerUserEditView";
+    }
+
+
+    @PostMapping("/managerUserEditAction.reservation")
+    public String managerUserEditAction(@ModelAttribute UserVO userVO, HttpSession session) throws Exception {
+        // 필드 값 검사
+        if (userVO.getUserID() == null || userVO.getUserID().isEmpty() ||
+                userVO.getUserPassword() == null || userVO.getUserPassword().isEmpty() ||
+                userVO.getUserPasswordConfirm() == null || userVO.getUserPasswordConfirm().isEmpty()
+            // ... 위 내용은 null 이거나 또는 빈 문자열 이면 아래 로직 실행 ...
+        ) {
+            session.setAttribute("modal", new ModalDTO("오류 메세지", "모든 내용은 빈 칸일 수 없습니다.", ModalDTO.ERROR));
+            return "redirect:/managerUserEditView.reservation?userID=" + userVO.getUserID();  // 회원 수정 페이지로 리다이렉트.
+        }
+
+        if (userVO.getUserPassword().equals(userVO.getUserPasswordConfirm())) {
+            try {
+                // 비밀번호와 '비밀번호 확인'이 일치하는 경우
+                memberService.edit(userVO);  // 바로 register 메소드에 전달하여 사용자 정보를 등록합니다.
+                session.setAttribute("modal", new ModalDTO("성공 메세지", "수정되었습니다!", ModalDTO.SUCCESS));
+                return "redirect:/mainView.reservation";  // 메인 페이지로 리다이렉트
+            } catch (Exception e) {
+                session.setAttribute("modal", new ModalDTO("오류 메세지", e.getMessage(), ModalDTO.ERROR));
+                return "redirect:/managerUserEditView.reservation?userID=" + userVO.getUserID();  // 회원 가입 페이지로 리다이렌트
+            }
+        } else {
+            session.setAttribute("modal", new ModalDTO("오류 메세지", "비밀번호가 일치하지 않습니다.", ModalDTO.ERROR));
+            return "redirect:/managerUserEditView.reservation?userID=" + userVO.getUserID();  // 회원 가입 페이지로 리다이렉트.
+        }
+    }
+
+
+    //////회워탈퇴
     @GetMapping("/userDeleteView.reservation")
     public String userDeleteView(Model model, HttpSession session) {
 

@@ -26,4 +26,6 @@ public interface MemberMapper {
     void updateUser(UserVO user);//수정
 
     void deleteUser(String userID); //삭제
+
+    List<UserVO> getUserById(String userId); //관리자 수정의 id가져옴
 }
