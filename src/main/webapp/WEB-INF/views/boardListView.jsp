@@ -28,7 +28,7 @@
                 <c:forEach items="${ list }" var="bbs">
                     <tr>
                         <td style="text-align: center;">${ bbs.bbsID }</td>
-                        <td><a href="./boardInfoView.reservation?bbsID=${ bbs.bbsID }" style="color:#000000;">
+                        <td style="text-align: center;"><a href="./boardInfoView.reservation?bbsID=${ bbs.bbsID }" style="color:#000000;">
                             <c:choose>
                                 <c:when test="${bbs.bbsAvailable == 0}">
                                     삭제된 게시글입니다.

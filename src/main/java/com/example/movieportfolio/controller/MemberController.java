@@ -36,7 +36,7 @@ public class MemberController {
 
         if (userName == null || userName.trim().isEmpty() ||    //null 이거나 trim()공뱅이 있으면 자동으로 지주고 isEmpty() 이면 오류확인
                 userResidentID == null || !userResidentID.matches("\\d{13}")) {// 주민들록13자매칭이 아니면
-            session.setAttribute("modal", new ModalDTO("오류 메시지", "모든 내용은 빈 칸일 수 없습니다.", "btn btn-danger"));
+            session.setAttribute("modal", new ModalDTO("오류 메시지", "ID 및 주민등록번호 13자리가 기입이 안됐습니다.", "btn btn-danger"));
             return "redirect:/userConfirmView.reservation";
         } else {
             session.setAttribute("modal", new ModalDTO("성공 메시지", "회원 정보를 기입하여 회원가입 해주세요.", "btn btn-primary"));
@@ -166,6 +166,7 @@ public class MemberController {
     }
 
     //회원 수정 시작
+    //수정 화면 표시
     @GetMapping("/userEditView.reservation")
     public String userEditView(Model model, HttpSession session) {
         // 세션에서 로그인한 사용자의 정보 가져오기
@@ -183,6 +184,7 @@ public class MemberController {
     }
 
     //회원수정 진행
+    //화면에서 신호를 보내면 받아서 로직 수행 하고 화면으로 내보내기
     @PostMapping("/userEditAction.reservation")
     public String editUser(@ModelAttribute UserVO userVO, HttpSession session) throws Exception {
         // 필드 값 검사
@@ -199,7 +201,7 @@ public class MemberController {
             try {
                 // 비밀번호와 '비밀번호 확인'이 일치하는 경우
                 memberService.edit(userVO);  // 바로 register 메소드에 전달하여 사용자 정보를 등록합니다.
-                session.setAttribute("modal", new ModalDTO("성공 메세지", "수정되었습니다! 로그인해주세요.", ModalDTO.SUCCESS));
+                session.setAttribute("modal", new ModalDTO("성공 메세지", "수정되었습니다!", ModalDTO.SUCCESS));
                 return "redirect:/mainView.reservation";  // 로그인 페이지로 리다이렉트
             } catch (Exception e) {
                 session.setAttribute("modal", new ModalDTO("오류 메세지", e.getMessage(), ModalDTO.ERROR));
@@ -211,15 +213,22 @@ public class MemberController {
         }
     }
 
-    //////관리자에서 수정 진행
+    //////관리자에서 수정
+    //수정 화면 표시
     @GetMapping("/managerUserEditView.reservation")
     public String managerUserEditView(@RequestParam("userID") String userID, Model model) {
         UserVO user = memberService.getUserById(userID);
-        model.addAttribute("user", user);
+
+        if (user != null) {
+            model.addAttribute("userPhone", user.getUserPhone());
+            model.addAttribute("userAddress", user.getUserAddress());
+            model.addAttribute("userEmail", user.getUserEmail());
+            model.addAttribute("user", user);
+        }
         return "managerUserEditView";
     }
 
-
+    //화면에서 신호를 보내면 받아서 로직 수행 하고 화면으로 내보내기
     @PostMapping("/managerUserEditAction.reservation")
     public String managerUserEditAction(@ModelAttribute UserVO userVO, HttpSession session) throws Exception {
         // 필드 값 검사
